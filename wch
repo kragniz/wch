@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+def playlist():
+    return list
+
+def load_config():
+    return position and file
+
+if __name__ == '__main__':
+    # get playlist
+    # check for saved position
+    # load the last position
+    # or play the first episode
