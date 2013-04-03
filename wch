@@ -1,13 +1,24 @@
 #!/usr/bin/env python
+import os
+
+def check_filetype(f):
+    filetypes = ['mkv', 'mp4', 'avi']
+    return True in [f.endswith(filetype) for filetype in filetypes]
 
 def playlist():
-    return list
+    return os.listdir(os.getcwd())
 
 def load_config():
     return position and file
 
 if __name__ == '__main__':
+    import sys
     # get playlist
     # check for saved position
     # load the last position
     # or play the first episode
+    args = sys.argv
+    if len(args) > 1:
+        print 'cding to', args[1]
+        os.chdir(args[1])
+    print [check_filetype(f) for f in os.listdir('.')]
