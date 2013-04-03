@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+import os
+
+LOG_FILE = '.wch'
+
+if os.path.isfile(LOG_FILE):
+    with open(LOG_FILE) as f:
+        t = f.read()
