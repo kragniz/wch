@@ -3,6 +3,13 @@ import os
 
 LOG_FILE = '.wch'
 
+def update(t):
+    with open(LOG_FILE, 'w') as f:
+        f.write(str(t+30))
+
 if os.path.isfile(LOG_FILE):
     with open(LOG_FILE) as f:
-        t = f.read()
+        t = int(f.read())
+        update(t)
+else:
+    update(0)
