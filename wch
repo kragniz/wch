@@ -2,6 +2,8 @@
 import os
 import re
 
+LOG_FILE = '.wch'
+
 def check_filetype(f):
     filetypes = ['mkv', 'mp4', 'avi']
     return True in [f.endswith(filetype) for filetype in filetypes]
@@ -10,7 +12,13 @@ def playlist():
     return _sort([f for f in os.listdir('.') if check_filetype(f)])
 
 def load_config():
-    return position and file
+    if os.path.isfile(LOG_FILE):
+        with open(LOG_FILE) as f:
+            num = int(f.readline())
+            t = int(f.readline())
+    else:
+        num, t = 0, 0
+    return num, t
 
 def _key(s):
     return [int(c) if c.isdigit() else c for c in re.split('([0-9]+)', s)][1:]
