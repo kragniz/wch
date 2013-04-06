@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 import os
+import sys
 
 LOG_FILE = '.wch'
+filenum = int(sys.argv[1])
 
 def update(t):
     with open(LOG_FILE, 'w') as f:
-        f.write(str(t+30))
+        f.write(str(filenum) + '\n' + str(t+30))
 
 if os.path.isfile(LOG_FILE):
     with open(LOG_FILE) as f:
-        t = int(f.read())
+        num = int((f.readline()))
+        if num != filenum:
+            t = -30
+        else:
+            t = int(f.readline())
         update(t)
 else:
-    update(0)
+    update(-30)
