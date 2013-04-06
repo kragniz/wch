@@ -23,7 +23,7 @@ def _sort(l):
 def play(filename):
     d = os.getcwd()
     path = os.path.join(d, filename)
-    return os.system('mplayer "{}"'.format(path))
+    return os.system('mplayer "{}" -heartbeat-cmd "wch_log {}"').format(path)
 
 if __name__ == '__main__':
     import sys
