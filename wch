@@ -20,6 +20,11 @@ def _sort(l):
     alphanum = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(l, key=_key)
 
+def play(filename):
+    d = os.getcwd()
+    path = os.path.join(d, filename)
+    return os.system('mplayer "{}"'.format(path))
+
 if __name__ == '__main__':
     import sys
     # get playlist
@@ -32,3 +37,5 @@ if __name__ == '__main__':
         os.chdir(args[1])
     for a in playlist():
         print a
+        if play(a) == 2:
+            break
