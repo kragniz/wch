@@ -39,7 +39,6 @@ if __name__ == '__main__':
     import sys
     args = sys.argv
     if len(args) > 1:
-        print 'cding to', args[1]
         os.chdir(args[1])
     ep, time = load_config()
     for a in playlist():
