@@ -8,5 +8,5 @@ setup(name='wch',
     author='Louis Taylor',
     author_email='kragniz@gmail.com',
     url='https://github.com/kragniz/wch',
-    scripts=['wch', 'wch_log']
+    scripts=['wch']
 )
