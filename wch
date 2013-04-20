@@ -16,8 +16,10 @@ def init_playlist(files):
 def save_playlist(p):
     json.dump(p, open(LOG_FILE, 'w'))
 
-def playlist():
-    d = json.load(open(LOG_FILE))
+def load_playlist():
+    return json.load(open(LOG_FILE))
+
+def sort_and_trim(d):
     return _sort(f for f in d if not d[f])
 
 def _key(s):
