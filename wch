@@ -2,6 +2,7 @@
 import os
 import re
 import subprocess
+import json
 
 LOG_FILE = '.wch'
 
@@ -9,8 +10,15 @@ def check_filetype(f):
     filetypes = ['mkv', 'mp4', 'avi']
     return True in [f.endswith(filetype) for filetype in filetypes]
 
+def init_playlist(files):
+    return {f:False for f in files if check_filetype(f)}
+
+def save_playlist(p):
+    json.dump(p, open(LOG_FILE, 'w'))
+
 def playlist():
-    return _sort([f for f in os.listdir('.') if check_filetype(f)])
+    d = json.load(open(LOG_FILE))
+    return _sort(f for f in d if not d[f])
 
 def _key(s):
     return [int(c) if c.isdigit() else c for c in re.split('([0-9]+)', s)][1:]
@@ -31,8 +39,10 @@ if __name__ == '__main__':
     import sys
     args = sys.argv
     if len(args) > 1:
-        os.chdir(args[1])
-
-    for a in playlist():
-        print a
-        play(a)
+        print 'more than one arg'
+        if args[1] == 'init':
+            print 'args[1] =', args[1]
+            if len(args) > 2:
+                p = init_playlist(args[1:])
+                save_playlist(p)
+                print p
