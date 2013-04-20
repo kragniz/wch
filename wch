@@ -41,10 +41,17 @@ if __name__ == '__main__':
     import sys
     args = sys.argv
     if len(args) > 1:
-        print 'more than one arg'
         if args[1] == 'init':
-            print 'args[1] =', args[1]
             if len(args) > 2:
                 p = init_playlist(args[1:])
                 save_playlist(p)
-                print p
+
+        elif args[1] == 'next' or args[1] == 'n':
+            p = load_playlist()
+            n = sort_and_trim(p)[0]
+            print 'playing', n
+            play(n)
+            del p[n]
+            save_playlist(p)
+        else:
+            print 'wch: "{}" is not a wch command'.format(args[1])
