@@ -35,6 +35,13 @@ class Wch(object):
         m = max(self.playlist.values())
         self.playlist[n] = m + 1
 
+    def next(self):
+        n = self.sort_and_trim(w.playlist)[0]
+        print 'playing', n
+        self.play(n)
+        self.mark_as_watched(n)
+        self.save_playlist()
+
     def play(self, filename):
         d = os.getcwd()
         path = os.path.join(d, filename)
@@ -54,10 +61,7 @@ if __name__ == '__main__':
 
         elif args[1] == 'next' or args[1] == 'n':
             w.load_playlist()
-            n = w.sort_and_trim(w.playlist)[0]
-            print 'playing', n
-            w.play(n)
-            w.mark_as_watched(n)
-            w.save_playlist()
+            w.next()
+
         else:
             print 'wch: "{}" is not a wch command'.format(args[1])
