@@ -30,6 +30,11 @@ def _sort(l):
     alphanum = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(l, key=_key)
 
+def mark_as_watched(n, p):
+    m = max(p.values())
+    p[n] = m + 1
+    return p
+
 def play(filename):
     d = os.getcwd()
     path = os.path.join(d, filename)
@@ -51,7 +56,7 @@ if __name__ == '__main__':
             n = sort_and_trim(p)[0]
             print 'playing', n
             play(n)
-            del p[n]
+            mark_as_watched(n, p)
             save_playlist(p)
         else:
             print 'wch: "{}" is not a wch command'.format(args[1])
