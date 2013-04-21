@@ -6,57 +6,58 @@ import json
 
 LOG_FILE = '.wch'
 
-def check_filetype(f):
-    filetypes = ['mkv', 'mp4', 'avi']
-    return True in [f.endswith(filetype) for filetype in filetypes]
+class Wch(object):
+    def check_filetype(self, f):
+        filetypes = ['mkv', 'mp4', 'avi']
+        return True in [f.endswith(filetype) for filetype in filetypes]
 
-def init_playlist(files):
-    return {f:False for f in files if check_filetype(f)}
+    def init_playlist(self, files):
+        self.playlist = {f:False for f in files if self.check_filetype(f)}
 
-def save_playlist(p):
-    json.dump(p, open(LOG_FILE, 'w'))
+    def save_playlist(self):
+        json.dump(self.playlist, open(LOG_FILE, 'w'))
 
-def load_playlist():
-    return json.load(open(LOG_FILE))
+    def load_playlist(self):
+        self.playlist = json.load(open(LOG_FILE))
 
-def sort_and_trim(d):
-    return _sort(f for f in d if not d[f])
+    def sort_and_trim(self, d):
+        return self._sort(f for f in d if not d[f])
 
-def _key(s):
-    return [int(c) if c.isdigit() else c for c in re.split('([0-9]+)', s)][1:]
+    def _key(self, s):
+        return [int(c) if c.isdigit() else c for c in re.split('([0-9]+)', s)][1:]
 
-def _sort(l):
-    convert = lambda text: int(text) if text.isdigit() else text 
-    alphanum = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-    return sorted(l, key=_key)
+    def _sort(self, l):
+        convert = lambda text: int(text) if text.isdigit() else text 
+        alphanum = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+        return sorted(l, key=self._key)
 
-def mark_as_watched(n, p):
-    m = max(p.values())
-    p[n] = m + 1
-    return p
+    def mark_as_watched(self, n):
+        m = max(self.playlist.values())
+        self.playlist[n] = m + 1
 
-def play(filename):
-    d = os.getcwd()
-    path = os.path.join(d, filename)
-    return subprocess.call(['mplayer', path],
-                            stderr=subprocess.STDOUT,
-                            stdout=subprocess.PIPE)
+    def play(self, filename):
+        d = os.getcwd()
+        path = os.path.join(d, filename)
+        return subprocess.call(['mplayer', path],
+                                stderr=subprocess.STDOUT,
+                                stdout=subprocess.PIPE)
 
 if __name__ == '__main__':
     import sys
     args = sys.argv
     if len(args) > 1:
+        w = Wch()
         if args[1] == 'init':
             if len(args) > 2:
-                p = init_playlist(args[1:])
-                save_playlist(p)
+                w.init_playlist(args[1:])
+                w.save_playlist()
 
         elif args[1] == 'next' or args[1] == 'n':
-            p = load_playlist()
-            n = sort_and_trim(p)[0]
+            w.load_playlist()
+            n = w.sort_and_trim(w.playlist)[0]
             print 'playing', n
-            play(n)
-            mark_as_watched(n, p)
-            save_playlist(p)
+            w.play(n)
+            w.mark_as_watched(n)
+            w.save_playlist()
         else:
             print 'wch: "{}" is not a wch command'.format(args[1])
