@@ -24,7 +24,9 @@ class Wch(object):
         return self._sort(f for f in d if not d[f])
 
     def _key(self, s):
-        return [int(c) if c.isdigit() else c for c in re.split('([0-9]+)', s)][1:]
+        return [int(c) if c.isdigit()
+                else c
+                for c in re.split('([0-9]+)', s)][1:]
 
     def _sort(self, l):
         convert = lambda text: int(text) if text.isdigit() else text 
@@ -36,13 +38,25 @@ class Wch(object):
         self.playlist[n] = m + 1
 
     def next(self):
-        n = self.sort_and_trim(w.playlist)[0]
-        print 'playing', n
+        n = self.sort_and_trim(self.playlist)[0]
         self.play(n)
         self.mark_as_watched(n)
         self.save_playlist()
 
+    def previous(self):
+        maxKey, maxVal = '', 0
+        for k, v in self.playlist.iteritems():
+            if v > maxVal:
+                maxVal = v
+                maxKey = k
+        if not maxKey:
+            maxKey = self.sort_and_trim(self.playlist)[0]
+        self.playlist[maxKey] = False
+        self.save_playlist()
+        self.play(maxKey)
+
     def play(self, filename):
+        print 'playing', filename
         d = os.getcwd()
         path = os.path.join(d, filename)
         return subprocess.call(['mplayer', path],
@@ -62,6 +76,10 @@ if __name__ == '__main__':
         elif args[1] == 'next' or args[1] == 'n':
             w.load_playlist()
             w.next()
+
+        elif args[1] == 'previous' or args[1] == 'p':
+            w.load_playlist()
+            w.previous()
 
         else:
             print 'wch: "{}" is not a wch command'.format(args[1])
