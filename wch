@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import json
+import argparse
 
 LOG_FILE = '.wch'
 
@@ -64,22 +65,16 @@ class Wch(object):
                                 stdout=subprocess.PIPE)
 
 if __name__ == '__main__':
-    import sys
-    args = sys.argv
-    if len(args) > 1:
-        w = Wch()
-        if args[1] == 'init':
-            if len(args) > 2:
-                w.init_playlist(args[1:])
-                w.save_playlist()
+    p = argparse.ArgumentParser()
+    sp = p.add_subparsers(dest='sub')
 
-        elif args[1] == 'next' or args[1] == 'n':
-            w.load_playlist()
-            w.next()
+    init = sp.add_parser('init', description='Initialise the wch file')
+    init.add_argument('files',
+                      nargs='*', 
+                      help='Video files to be added to the playlist')
+    help = sp.add_parser('help')
+    help.add_argument('command',
+                      nargs="?",
+                      default=None)
 
-        elif args[1] == 'previous' or args[1] == 'p':
-            w.load_playlist()
-            w.previous()
-
-        else:
-            print 'wch: "{}" is not a wch command'.format(args[1])
+    parsed = p.parse_args()
