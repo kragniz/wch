@@ -71,6 +71,9 @@ if __name__ == '__main__':
         if args[1] in ('next', 'n'):
             w.load_playlist()
             w.next()
+        if args[1] in ('previous', 'p'):
+            w.load_playlist()
+            w.previous()
         elif args[1] == 'init':
             if len(args) > 2:
                 w.init_playlist(args[1:])
