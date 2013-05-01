@@ -78,6 +78,9 @@ if __name__ == '__main__':
             if len(args) > 2:
                 w.init_playlist(args[1:])
                 w.save_playlist()
+            else:
+                print 'wch: You didn\'t specify any files to add to be added'
+
         elif args[1] in ('--help', 'help', '-h', 'h'):
             print '''usage:
     wch init [files]
