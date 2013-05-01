@@ -21,8 +21,8 @@ class Wch(object):
     def load_playlist(self):
         self.playlist = json.load(open(LOG_FILE))
 
-    def sort_and_trim(self, d):
-        return self._sort(f for f in d if not d[f])
+    def sort_and_trim(self, d, watched=False):
+        return self._sort(f for f in d if (not d[f] or watched))
 
     def _key(self, s):
         return [int(c) if c.isdigit()
@@ -80,6 +80,17 @@ if __name__ == '__main__':
                 w.save_playlist()
             else:
                 print 'wch: You didn\'t specify any files to add to be added'
+
+        elif args[1] == 'ls':
+            def print_ansi(text, color):
+                print '\033[1;{}m{}\033[0m'.format(color, text)
+            w.load_playlist()
+            p = w.sort_and_trim(w.playlist, watched=True)
+            for f in p:
+                if w.playlist[f]:
+                    print_ansi(f, 32)
+                else:
+                    print_ansi(f, 31)
 
         elif args[1] in ('--help', 'help', '-h', 'h'):
             print '''usage:
