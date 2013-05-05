@@ -60,9 +60,7 @@ class Wch(object):
         print 'Playing', filename
         d = os.getcwd()
         path = os.path.join(d, filename)
-        return subprocess.call(['mplayer', path],
-                                stderr=subprocess.STDOUT,
-                                stdout=subprocess.PIPE)
+        return subprocess.call(['mplayer', path])
 
 if __name__ == '__main__':
     args = sys.argv
