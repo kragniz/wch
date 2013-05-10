@@ -77,7 +77,7 @@ if __name__ == '__main__':
                 w.init_playlist(args[1:])
                 w.save_playlist()
             else:
-                print 'wch: You didn\'t specify any files to add to be added'
+                w.init_playlist(os.listdir(os.getcwd()))
 
         elif args[1] == 'ls':
             def print_ansi(text, color):
