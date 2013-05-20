@@ -19,7 +19,14 @@ class Wch(object):
         json.dump(self.playlist, open(LOG_FILE, 'w'))
 
     def load_playlist(self):
-        self.playlist = json.load(open(LOG_FILE))
+        if os.path.isfile(LOG_FILE):
+            self.playlist = json.load(open(LOG_FILE))
+        else:
+            print '''wch: couldn't find a .wch file
+You need in run
+    $ wch init
+before using this directory'''
+            sys.exit(1)
 
     def sort_and_trim(self, d, watched=False):
         return self._sort(f for f in d if (not d[f] or watched))
