@@ -3,3 +3,7 @@ Small mplayer wrapper which allows restarting from the episode last watched.
 To install, run:
 
     # python setup.py install
+
+TODO:
+    MAL integration
+    folder listing
