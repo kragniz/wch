@@ -80,6 +80,13 @@ before using this directory'''
             else:
                 print_ansi(f, 31)
 
+    def init(self, args):
+        if len(args) > 2:
+            w.init_playlist(args[1:])
+            w.save_playlist()
+        else:
+            w.init_playlist(os.listdir(os.getcwd()))
+            w.save_playlist()
 
 if __name__ == '__main__':
     args = sys.argv
@@ -94,12 +101,8 @@ if __name__ == '__main__':
             w.previous()
 
         elif args[1] == 'init':
-            if len(args) > 2:
-                w.init_playlist(args[1:])
-                w.save_playlist()
-            else:
-                w.init_playlist(os.listdir(os.getcwd()))
-
+            w.init(args)
+            
         elif args[1] == 'ls':
             w.list()
 
