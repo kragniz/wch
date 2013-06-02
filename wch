@@ -18,8 +18,11 @@ class Wch(object):
     def save_playlist(self):
         json.dump(self.playlist, open(LOG_FILE, 'w'))
 
+    def dir_has_wch(self):
+        return os.path.isfile(LOG_FILE)
+
     def load_playlist(self):
-        if os.path.isfile(LOG_FILE):
+        if self.dir_has_wch():
             self.playlist = json.load(open(LOG_FILE))
         else:
             print '''wch: couldn't find a .wch file
@@ -72,13 +75,22 @@ before using this directory'''
     def list(self):
         def print_ansi(text, color):
             print '\033[1;{}m{}\033[0m'.format(color, text)
-        w.load_playlist()
-        p = w.sort_and_trim(w.playlist, watched=True)
-        for f in p:
-            if w.playlist[f]:
-                print_ansi(f, 32)
-            else:
-                print_ansi(f, 31)
+        if self.dir_has_wch():
+            w.load_playlist()
+            p = w.sort_and_trim(w.playlist, watched=True)
+            for f in p:
+                if w.playlist[f]:
+                    print_ansi(f, 32)
+                else:
+                    print_ansi(f, 31)
+
+        top = os.getcwd()
+        dirs = [f for f in os.listdir(os.getcwd()) if os.path.isdir(f)]
+        for d in dirs:
+            os.chdir(os.path.join(top, d))
+            if self.dir_has_wch():
+                print_ansi(d, 35)
+                os.chdir(top)
 
     def init(self, args):
         if len(args) > 2:
