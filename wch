@@ -21,15 +21,18 @@ class Wch(object):
     def dir_has_wch(self):
         return os.path.isfile(LOG_FILE)
 
+    def print_init_error(self):
+        print '''wch: couldn't find a .wch file
+You need in run
+    $ wch init
+before using this directory'''
+        sys.exit(1)
+
     def load_playlist(self):
         if self.dir_has_wch():
             self.playlist = json.load(open(LOG_FILE))
         else:
-            print '''wch: couldn't find a .wch file
-You need in run
-    $ wch init
-before using this directory'''
-            sys.exit(1)
+            self.print_init_error()
 
     def sort_and_trim(self, d, watched=False):
         return self._sort(f for f in d if (not d[f] or watched))
@@ -75,6 +78,7 @@ before using this directory'''
     def list(self):
         def print_ansi(text, color):
             print '\033[1;{}m{}\033[0m'.format(color, text)
+        printed = False
         if self.dir_has_wch():
             w.load_playlist()
             p = w.sort_and_trim(w.playlist, watched=True)
@@ -83,14 +87,18 @@ before using this directory'''
                     print_ansi(f, 32)
                 else:
                     print_ansi(f, 31)
+            printed = True
 
         top = os.getcwd()
         dirs = [f for f in os.listdir(os.getcwd()) if os.path.isdir(f)]
         for d in dirs:
             os.chdir(os.path.join(top, d))
             if self.dir_has_wch():
+                printed = True
                 print_ansi(d, 35)
                 os.chdir(top)
+        if not printed:
+            self.print_init_error()
 
     def init(self, args):
         if len(args) > 2:
