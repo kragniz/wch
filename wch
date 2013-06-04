@@ -69,6 +69,16 @@ before using this directory'''
         self.save_playlist()
         self.play(maxKey)
 
+    def play_current(self):
+        lastFile = None
+        lastNumber = 0
+        for k, v in self.playlist.iteritems():
+            if v > lastNumber:
+                lastFile = k
+                lastNumber = v
+        if lastFile is not None:
+            self.play(lastFile)
+
     def play(self, filename):
         print 'Playing', filename
         d = os.getcwd()
@@ -115,6 +125,10 @@ if __name__ == '__main__':
         if args[1] in ('next', 'n'):
             w.load_playlist()
             w.next()
+
+        elif args[1] in ('current', 'c'):
+            w.load_playlist()
+            w.play_current()
 
         elif args[1] in ('previous', 'p'):
             w.load_playlist()
