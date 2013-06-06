@@ -5,6 +5,9 @@ import re
 import subprocess
 import json
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 LOG_FILE = '.wch'
 
 class Wch(object):
