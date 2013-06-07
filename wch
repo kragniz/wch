@@ -127,6 +127,7 @@ before using this directory'''
     wch init [files]
     wch next/n
     wch previous/p
+    wch current/c
     wch ls'''
 
 if __name__ == '__main__':
